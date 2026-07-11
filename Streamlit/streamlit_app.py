@@ -256,8 +256,6 @@ with tab_pred:
                help=f"Accuracy: {results['c1']['accuracy']*100:.1f}%")
     c2.metric("C2 — Txn Forecast R²", f"{results['c2']['r2']:.3f}",
                help=f"MAE: {results['c2']['mae']:,.0f} CZK")
-    c3.metric("C3 — Card Adoption AUC", f"{results['c3']['auc']:.3f}",
-               help=f"Accuracy: {results['c3']['accuracy']*100:.1f}%")
 
 # ── TAB 3 — TRY A PREDICTION (live form using trained models) ──────
 with tab_try:
@@ -292,16 +290,6 @@ with tab_try:
                 else:
                     st.success("✅ Model flags this loan as LOW RISK of default.")
 
-        else:
-            info = results['c3']
-            st.write(f"Features used: `{info['features']}`")
-            with st.form("c3_form"):
-                inputs = {}
-                cols = st.columns(2)
-                for i, feat in enumerate(info['features']):
-                    with cols[i % 2]:
-                        inputs[feat] = st.number_input(feat, value=0.0, step=1.0)
-                submitted = st.form_submit_button("Predict Card Adoption")
             if submitted:
                 X = pd.DataFrame([inputs])[info['features']]
                 X_s = info['scaler'].transform(X)
