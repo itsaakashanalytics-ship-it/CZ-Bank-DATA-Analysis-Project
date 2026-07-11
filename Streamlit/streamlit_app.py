@@ -256,59 +256,39 @@ with tab_pred:
                help=f"Accuracy: {results['c1']['accuracy']*100:.1f}%")
     c2.metric("C2 — Txn Forecast R²", f"{results['c2']['r2']:.3f}",
                help=f"MAE: {results['c2']['mae']:,.0f} CZK")
-    c3.metric("C3 — Card Adoption AUC", f"{results['c3']['auc']:.3f}",
-               help=f"Accuracy: {results['c3']['accuracy']*100:.1f}%")
 
 # ── TAB 3 — TRY A PREDICTION (live form using trained models) ──────
 with tab_try:
     st.header("Try a Live Prediction")
+
     if st.session_state.pred_results is None:
         st.warning("Train the models in the **Predictive Models** tab first.")
+
     else:
         results = st.session_state.pred_results
-        model_choice = st.selectbox(
-            "Choose a model",
-            ["C1 — Loan Default Risk", "C3 — Card Adoption Likelihood"]
-        )
+        info = results['c1']
 
-        if model_choice.startswith("C1"):
-            info = results['c1']
-            st.write(f"Features used: `{info['features']}`")
-            with st.form("c1_form"):
-                inputs = {}
-                cols = st.columns(2)
-                for i, feat in enumerate(info['features']):
-                    with cols[i % 2]:
-                        inputs[feat] = st.number_input(feat, value=0.0, step=1.0)
-                submitted = st.form_submit_button("Predict Default Risk")
-            if submitted:
-                X = pd.DataFrame([inputs])[info['features']]
-                X_s = info['scaler'].transform(X)
-                prob = info['model'].predict_proba(X_s)[0, 1]
-                st.metric("Predicted Default Probability", f"{prob*100:.1f}%")
-                st.progress(min(max(prob, 0.0), 1.0))
-                if prob > 0.5:
-                    st.error("⚠️ Model flags this loan as HIGH RISK of default.")
-                else:
-                    st.success("✅ Model flags this loan as LOW RISK of default.")
+        st.write(f"Features used: `{info['features']}`")
 
-        else:
-            info = results['c3']
-            st.write(f"Features used: `{info['features']}`")
-            with st.form("c3_form"):
-                inputs = {}
-                cols = st.columns(2)
-                for i, feat in enumerate(info['features']):
-                    with cols[i % 2]:
-                        inputs[feat] = st.number_input(feat, value=0.0, step=1.0)
-                submitted = st.form_submit_button("Predict Card Adoption")
-            if submitted:
-                X = pd.DataFrame([inputs])[info['features']]
-                X_s = info['scaler'].transform(X)
-                prob = info['model'].predict_proba(X_s)[0, 1]
-                st.metric("Predicted Card Adoption Probability", f"{prob*100:.1f}%")
-                st.progress(min(max(prob, 0.0), 1.0))
-                if prob > 0.5:
-                    st.success("💳 Model predicts this customer is LIKELY to adopt a card.")
-                else:
-                    st.info("Model predicts this customer is UNLIKELY to adopt a card.")
+        with st.form("c1_form"):
+            inputs = {}
+            cols = st.columns(2)
+
+            for i, feat in enumerate(info['features']):
+                with cols[i % 2]:
+                    inputs[feat] = st.number_input(feat, value=0.0, step=1.0)
+
+            submitted = st.form_submit_button("Predict Default Risk")
+
+        if submitted:
+            X = pd.DataFrame([inputs])[info['features']]
+            X_s = info['scaler'].transform(X)
+            prob = info['model'].predict_proba(X_s)[0, 1]
+
+            st.metric("Predicted Default Probability", f"{prob*100:.1f}%")
+            st.progress(min(max(prob, 0.0), 1.0))
+
+            if prob > 0.5:
+                st.error("⚠️ Model flags this loan as HIGH RISK of default.")
+            else:
+                st.success("✅ Model flags this loan as LOW RISK of default.")
