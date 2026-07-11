@@ -196,7 +196,7 @@ with tab_desc:
         "accounts, transactions, loans, cards, districts, and the diagnostic "
         "deep-dives) directly in this page, with value labels on every bar chart."
     )
-    if st.button("▶️ Run Descriptive & Diagnostic Analysis"):
+   
         plt.show = _st_show  # redirect this run's plt.show() calls into the page
         with st.spinner("Crunching numbers and drawing charts..."):
             kpis, log_text = _run_capturing_output(run_descriptive_analysis, data, show=True)
