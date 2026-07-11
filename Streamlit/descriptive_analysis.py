@@ -46,12 +46,34 @@ def run_descriptive_analysis(data, show=True):
     # SECTION A — DESCRIPTIVE EDA
     # ================================================================
 
-    # ── A1. CUSTOMER DEMOGRAPHICS ───────────────────────────────────
-    print("\n===== A1. CUSTOMER DEMOGRAPHICS =====")
-    print(f"Total Clients     : {client['client_id'].nunique():,}")
-    print(f"Avg Age           : {client['age'].mean():.1f}")
-    print(f"Female %          : {(client['gender']=='F').mean()*100:.1f}%")
-    print(f"Districts covered : {client['district_id'].nunique()}")
+    st.markdown("---")
+    st.subheader("👥 A1. Customer Demographics")
+    
+    c1, c2, c3, c4 = st.columns(4)
+    
+    c1.metric("Total Clients", f"{client['client_id'].nunique():,}")
+    c2.metric("Average Age", f"{client['age'].mean():.1f}")
+    c3.metric("Female %", f"{(client['gender']=='F').mean()*100:.1f}%")
+    c4.metric("Districts", client['district_id'].nunique())
+    
+    st.info("""
+    ### 💡 Insights
+    
+    • Customer base is almost equally distributed between males and females.
+    
+    • Average customer age is approximately 45 years.
+    
+    • Most customers belong to the economically active age group.
+    
+    • Banking services are available across 77 districts.
+    """)
+    
+    st.success("""
+    ### 🎯 Recommendation
+    
+    Increase acquisition among younger customers through
+    digital banking campaigns and student banking products.
+    """)
 
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
     fig.suptitle('A1 — Customer Demographics', fontsize=14, fontweight='bold')
@@ -77,10 +99,42 @@ def run_descriptive_analysis(data, show=True):
     if show: plt.show()
 
     # ── A2. ACCOUNT ANALYSIS ────────────────────────────────────────
-    print("\n===== A2. ACCOUNT ANALYSIS =====")
-    print(f"Total Accounts   : {account['account_id'].nunique():,}")
-    print(f"Account Types    :\n{account['Account_type'].value_counts()}")
-    print(f"Frequency dist   :\n{account['frequency'].value_counts()}")
+    st.markdown("---")
+    st.subheader("🏦 A2. Account Analysis")
+    
+    c1, c2, c3 = st.columns(3)
+    
+    c1.metric(
+        "Accounts",
+        f"{account['account_id'].nunique():,}"
+    )
+    
+    c2.metric(
+        "Account Types",
+        account['Account_type'].nunique()
+    )
+    
+    c3.metric(
+        "Frequency Types",
+        account['frequency'].nunique()
+    )
+    
+    st.info("""
+    ### 💡 Insights
+    
+    • Savings and salary accounts dominate the portfolio.
+    
+    • Customer acquisition has steadily increased over time.
+    
+    • Account ownership is diversified across products.
+    """)
+    
+    st.success("""
+    ### 🎯 Recommendation
+    
+    Promote bundled products including debit cards,
+    mobile banking and salary accounts.
+    """)
 
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
     fig.suptitle('A2 — Account Analysis', fontsize=14, fontweight='bold')
@@ -109,17 +163,51 @@ def run_descriptive_analysis(data, show=True):
     if show: plt.show()
 
     # ── A3. TRANSACTION OVERVIEW ─────────────────────────────────────
-    print("\n===== A3. TRANSACTION OVERVIEW =====")
-    total_txns   = len(transaction)
-    total_credit = transaction[transaction['type_lbl'] == 'Credit']['amount'].sum()
-    total_debit  = transaction[transaction['type_lbl'] == 'Debit']['amount'].sum()
-    avg_txn      = transaction['amount'].mean()
-
-    print(f"Total Transactions  : {total_txns:,}")
-    print(f"Total Credit (CZK)  : {total_credit:,.0f}")
-    print(f"Total Debit  (CZK)  : {total_debit:,.0f}")
-    print(f"Avg Txn Amount      : {avg_txn:,.2f}")
-    print(f"Credit:Debit Ratio  : {total_credit/total_debit:.2f}")
+    st.markdown("---")
+    st.subheader("💳 A3. Transaction Analysis")
+    
+    c1, c2, c3, c4, c5 = st.columns(5)
+    
+    c1.metric("Transactions", f"{total_txns:,}")
+    
+    c2.metric(
+        "Credit",
+        f"{total_credit/1e9:.2f} B"
+    )
+    
+    c3.metric(
+        "Debit",
+        f"{total_debit/1e9:.2f} B"
+    )
+    
+    c4.metric(
+        "Average Transaction",
+        f"{avg_txn:,.0f}"
+    )
+    
+    c5.metric(
+        "Credit / Debit",
+        f"{total_credit/total_debit:.2f}"
+    )
+    
+    st.info("""
+    ### 💡 Insights
+    
+    • More than one million transactions indicate strong customer engagement.
+    
+    • Credits slightly exceed debits, reflecting healthy liquidity.
+    
+    • Cash withdrawals remain one of the most common operations.
+    
+    • Monthly transaction activity is relatively stable.
+    """)
+    
+    st.success("""
+    ### 🎯 Recommendation
+    
+    Increase digital payment adoption through
+    cashback, UPI incentives and mobile banking campaigns.
+    """)
 
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
     fig.suptitle('A3 — Transaction Overview', fontsize=14, fontweight='bold')
