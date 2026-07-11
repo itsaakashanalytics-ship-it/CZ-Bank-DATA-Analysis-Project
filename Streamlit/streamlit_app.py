@@ -215,8 +215,8 @@ with tab_desc:
     c7.metric("Dormant Accounts", f"{kpis['dormant_rate']:.1f}%")
     c8.metric("High-Debit Accounts", f"{kpis['high_debit_rate']:.1f}%")
 
-        with st.expander("📜 Full console output (print statements & tables)"):
-            st.text(log_text)
+    with st.expander("📜 Full console output (print statements & tables)"):
+        st.text(log_text)
 
 # ── TAB 2 — PREDICTIVE MODELS (Section C) ──────────────────────────
 with tab_pred:
