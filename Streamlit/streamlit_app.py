@@ -226,25 +226,25 @@ with tab_pred:
         "loan default prediction, transaction forecasting, and card adoption "
         "prediction. Models are pickled to the model folder for reuse."
     )
-    if st.button("▶️ Train & Evaluate Models"):
-        plt.show = _st_show
-        with st.spinner("Training models..."):
-            results, log_text = _run_capturing_output(
-                run_predictive_analysis, data, model_dir=model_dir, show=True
-            )
-        st.session_state.pred_results = results
 
-        st.subheader("Model Performance")
-        c1, c2, c3 = st.columns(3)
-        c1.metric("C1 — Loan Default AUC", f"{results['c1']['auc']:.3f}",
-                   help=f"Accuracy: {results['c1']['accuracy']*100:.1f}%")
-        c2.metric("C2 — Txn Forecast R²", f"{results['c2']['r2']:.3f}",
-                   help=f"MAE: {results['c2']['mae']:,.0f} CZK")
-        c3.metric("C3 — Card Adoption AUC", f"{results['c3']['auc']:.3f}",
-                   help=f"Accuracy: {results['c3']['accuracy']*100:.1f}%")
+    plt.show = _st_show
+    with st.spinner("Training models..."):
+        results, log_text = _run_capturing_output(
+            run_predictive_analysis, data, model_dir=model_dir, show=True
+        )
+    st.session_state.pred_results = results
 
-        with st.expander("📜 Full console output (metrics & classification reports)"):
-            st.text(log_text)
+    st.subheader("Model Performance")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("C1 — Loan Default AUC", f"{results['c1']['auc']:.3f}",
+               help=f"Accuracy: {results['c1']['accuracy']*100:.1f}%")
+    c2.metric("C2 — Txn Forecast R²", f"{results['c2']['r2']:.3f}",
+               help=f"MAE: {results['c2']['mae']:,.0f} CZK")
+    c3.metric("C3 — Card Adoption AUC", f"{results['c3']['auc']:.3f}",
+               help=f"Accuracy: {results['c3']['accuracy']*100:.1f}%")
+
+    with st.expander("📜 Full console output (metrics & classification reports)"):
+        st.text(log_text)
 
 # ── TAB 3 — TRY A PREDICTION (live form using trained models) ──────
 with tab_try:
