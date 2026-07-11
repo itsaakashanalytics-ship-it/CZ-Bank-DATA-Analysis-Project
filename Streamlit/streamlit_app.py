@@ -26,6 +26,42 @@ from predictive_analysis import run_predictive_analysis
 
 st.set_page_config(page_title="Czech Bank Analytics", page_icon="🏦", layout="wide")
 
+st.markdown("""
+<style>
+
+.main > div{
+    padding-top:1rem;
+}
+
+div[data-testid="metric-container"]{
+    background:white;
+    border:1px solid #E5E7EB;
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 3px 8px rgba(0,0,0,.08);
+}
+
+div[data-testid="metric-container"] label{
+    font-weight:600;
+    font-size:16px;
+}
+
+div[data-testid="metric-container"] div[data-testid="stMetricValue"]{
+    font-size:34px;
+    font-weight:700;
+}
+
+.block{
+    background:#F8FAFC;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:25px;
+    border:1px solid #E5E7EB;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # Resolve paths relative to THIS FILE's location, not the process's working
 # directory. Streamlit Cloud runs the app with the repo root as the working
 # directory regardless of which subfolder the entry-point script lives in,
@@ -192,11 +228,22 @@ with st.sidebar.expander("⚙️ Advanced: change data source"):
 st.title("Czechoslovakia Bank — Analytics Dashboard")
 st.caption("Descriptive, diagnostic & predictive analysis, in one interactive app.")
 
-st.info(
+st.success(
 """
-This dashboard analyzes customer demographics, accounts, transactions,
-loans, regional banking performance, and predictive models developed
-using SQL, Python, Machine Learning and Power BI.
+### Project Overview
+
+This dashboard analyzes customer demographics, banking transactions,
+loan portfolio, regional performance and predictive models using
+
+• SQL Server
+
+• Python
+
+• Power BI
+
+• Machine Learning
+
+• Streamlit
 """
 )
 
@@ -211,12 +258,16 @@ if st.session_state.data is None:
 
 data = st.session_state.data
 
-tab_desc, tab_pred, tab_try = st.tabs(
-    ["📊 Descriptive & Diagnostic EDA", "🤖 Predictive Models", "🔮 Try a Prediction"]
+tab1, tab2, tab3 = st.tabs(
+[
+"📊 Executive Dashboard",
+"🤖 Machine Learning",
+"🔮 Live Prediction"
+]
 )
 
 # ── TAB 1 — DESCRIPTIVE & DIAGNOSTIC EDA (Sections A + B) ──────────
-with tab_desc:
+with tab1:
     st.header("Sections A & B — Descriptive and Diagnostic EDA")
     st.write(
         "Runs every chart from `descriptive_analysis.py` (customer demographics, "
@@ -263,14 +314,28 @@ with tab_desc:
         st.metric("High-Debit Accounts", f"{kpis['high_debit_rate']:.1f}%")
     
     st.divider()
+    st.info("""
+    ### Executive Summary
     
-    st.subheader("📊 Detailed Analysis")
+    • 5,369 banking customers analyzed
+    
+    • Over 1 Million transactions processed
+    
+    • Healthy loan portfolio with low default rate
+    
+    • Card penetration remains below 20%
+    
+    • High opportunity for digital banking growth
+    """)
+    
+    st.markdown("---")
+    st.header("📊 Business Analysis")
     
     with st.spinner("Generating charts..."):
         _run_capturing_output(run_descriptive_analysis, data, show=True)
     
 # ── TAB 2 — PREDICTIVE MODELS (Section C) ──────────────────────────
-with tab_pred:
+with tab2:
     st.header("Section C — Predictive Modelling")
     st.write(
         "Trains and evaluates the three models from `predictive_analysis.py`: "
@@ -293,7 +358,7 @@ with tab_pred:
                help=f"MAE: {results['c2']['mae']:,.0f} CZK")
 
 # ── TAB 3 — TRY A PREDICTION (live form using trained models) ──────
-with tab_try:
+with tab3:
     st.header("Try a Live Prediction")
 
     if st.session_state.pred_results is None:
