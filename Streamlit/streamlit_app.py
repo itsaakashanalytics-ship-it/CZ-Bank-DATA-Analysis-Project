@@ -224,50 +224,50 @@ with tab_desc:
         "deep-dives) directly in this page, with value labels on every bar chart."
     )
    
-plt.show = _st_show
-
-# Get KPIs only (don't render charts yet)
-with contextlib.redirect_stdout(io.StringIO()):
-    kpis = run_descriptive_analysis(data, show=False)
-
-st.session_state.desc_kpis = kpis
-
-st.markdown("## 📈 Executive Dashboard")
-
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    st.metric("Total Clients", f"{kpis['total_clients']:,}")
-
-with col2:
-    st.metric("Total Accounts", f"{kpis['total_accounts']:,}")
-
-with col3:
-    st.metric("Total Transactions", f"{kpis['total_txns']:,}")
-
-with col4:
-    st.metric("Total Loans", f"{kpis['total_loans']:,}")
-
-col5, col6, col7, col8 = st.columns(4)
-
-with col5:
-    st.metric("Loan Default Rate", f"{kpis['default_rate']:.2f}%")
-
-with col6:
-    st.metric("Card Penetration", f"{kpis['card_penetration']:.1f}%")
-
-with col7:
-    st.metric("Dormant Accounts", f"{kpis['dormant_rate']:.1f}%")
-
-with col8:
-    st.metric("High-Debit Accounts", f"{kpis['high_debit_rate']:.1f}%")
-
-st.divider()
-
-st.subheader("📊 Detailed Analysis")
-
-with st.spinner("Generating charts..."):
-    _run_capturing_output(run_descriptive_analysis, data, show=True)
+    plt.show = _st_show
+    
+    # Get KPIs only (don't render charts yet)
+    with contextlib.redirect_stdout(io.StringIO()):
+        kpis = run_descriptive_analysis(data, show=False)
+    
+    st.session_state.desc_kpis = kpis
+    
+    st.markdown("## 📈 Executive Dashboard")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("Total Clients", f"{kpis['total_clients']:,}")
+    
+    with col2:
+        st.metric("Total Accounts", f"{kpis['total_accounts']:,}")
+    
+    with col3:
+        st.metric("Total Transactions", f"{kpis['total_txns']:,}")
+    
+    with col4:
+        st.metric("Total Loans", f"{kpis['total_loans']:,}")
+    
+    col5, col6, col7, col8 = st.columns(4)
+    
+    with col5:
+        st.metric("Loan Default Rate", f"{kpis['default_rate']:.2f}%")
+    
+    with col6:
+        st.metric("Card Penetration", f"{kpis['card_penetration']:.1f}%")
+    
+    with col7:
+        st.metric("Dormant Accounts", f"{kpis['dormant_rate']:.1f}%")
+    
+    with col8:
+        st.metric("High-Debit Accounts", f"{kpis['high_debit_rate']:.1f}%")
+    
+    st.divider()
+    
+    st.subheader("📊 Detailed Analysis")
+    
+    with st.spinner("Generating charts..."):
+        _run_capturing_output(run_descriptive_analysis, data, show=True)
     
 # ── TAB 2 — PREDICTIVE MODELS (Section C) ──────────────────────────
 with tab_pred:
