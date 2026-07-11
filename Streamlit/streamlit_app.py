@@ -197,23 +197,23 @@ with tab_desc:
         "deep-dives) directly in this page, with value labels on every bar chart."
     )
    
-        plt.show = _st_show  # redirect this run's plt.show() calls into the page
-        with st.spinner("Crunching numbers and drawing charts..."):
-            kpis, log_text = _run_capturing_output(run_descriptive_analysis, data, show=True)
-        st.session_state.desc_kpis = kpis
+    plt.show = _st_show  # redirect this run's plt.show() calls into the page
+    with st.spinner("Crunching numbers and drawing charts..."):
+        kpis, log_text = _run_capturing_output(run_descriptive_analysis, data, show=True)
+    st.session_state.desc_kpis = kpis
 
-        st.subheader("Key KPIs")
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Total Clients", f"{kpis['total_clients']:,}")
-        c2.metric("Total Accounts", f"{kpis['total_accounts']:,}")
-        c3.metric("Total Transactions", f"{kpis['total_txns']:,}")
-        c4.metric("Total Loans", f"{kpis['total_loans']:,}")
+    st.subheader("Key KPIs")
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Total Clients", f"{kpis['total_clients']:,}")
+    c2.metric("Total Accounts", f"{kpis['total_accounts']:,}")
+    c3.metric("Total Transactions", f"{kpis['total_txns']:,}")
+    c4.metric("Total Loans", f"{kpis['total_loans']:,}")
 
-        c5, c6, c7, c8 = st.columns(4)
-        c5.metric("Loan Default Rate", f"{kpis['default_rate']:.2f}%")
-        c6.metric("Card Penetration", f"{kpis['card_penetration']:.1f}%")
-        c7.metric("Dormant Accounts", f"{kpis['dormant_rate']:.1f}%")
-        c8.metric("High-Debit Accounts", f"{kpis['high_debit_rate']:.1f}%")
+    c5, c6, c7, c8 = st.columns(4)
+    c5.metric("Loan Default Rate", f"{kpis['default_rate']:.2f}%")
+    c6.metric("Card Penetration", f"{kpis['card_penetration']:.1f}%")
+    c7.metric("Dormant Accounts", f"{kpis['dormant_rate']:.1f}%")
+    c8.metric("High-Debit Accounts", f"{kpis['high_debit_rate']:.1f}%")
 
         with st.expander("📜 Full console output (print statements & tables)"):
             st.text(log_text)
